@@ -8,6 +8,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.utils.checkpoint as checkpoint
 from timm.models.layers import DropPath, to_2tuple, trunc_normal_
+from huggingface_hub import PyTorchModelHubMixin
 
 from torch_utils import misc
 from torch_utils import persistence
@@ -859,7 +860,12 @@ class SynthesisNet(nn.Module):
 
 
 @persistence.persistent_class
-class Generator(nn.Module):
+class Generator(nn.Module,
+                PyTorchModelHubMixin,
+                library_name="MAT",
+                repo_url="https://github.com/fenglinglwb/MAT",
+                tags=["image-to-image"],
+                ):
     def __init__(self,
                  z_dim,                  # Input latent (Z) dimensionality, 0 = no latent.
                  c_dim,                  # Conditioning label (C) dimensionality, 0 = no label.
